@@ -1,0 +1,43 @@
+{
+    "author": "Eric McCormick",
+    "dependencies": {
+        "pebble-clay": "^1.0.4"
+    },
+    "keywords": [],
+    "name": "gemini-with-voice",
+    "pebble": {
+        "capabilities": [
+            "configurable"
+        ],
+        "displayName": "Gemini with voice",
+        "enableMultiJS": true,
+        "messageKeys": [
+            "COMMAND",
+            "TEXT",
+            "CHUNK",
+            "GOOGLE_API_KEY",
+            "FONT_SIZE",
+            "CUSTOM_PERSONA"
+        ],
+        "projectType": "native",
+        "resources": {
+            "media": [
+                {
+                    "file": "images/IMAGE_GEMINI_LOGO",
+                    "name": "IMAGE_GEMINI_LOGO",
+                    "targetPlatforms": null,
+                    "type": "bitmap"
+                }
+            ]
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "emery"
+        ],
+        "uuid": "426c68c7-bdd7-445a-860a-ea587a188993",
+        "watchapp": {
+            "watchface": false
+        }
+    },
+    "version": "1.1.0"
+}
