@@ -40,6 +40,16 @@ var clayConfig = [
           "autocorrect": "off",
           "autocapitalize": "off"
         }
+      },
+      {
+        "type": "input",
+        "messageKey": "MODEL_ID",
+        "label": "Gemini Model ID",
+        "attributes": {
+          "type": "text",
+          "autocorrect": "off",
+          "autocapitalize": "off"
+        }
       }
     ]
   },
@@ -72,6 +82,7 @@ var clay = new Clay(clayConfig, null, {
 
 let geminiApiKey = localStorage.getItem("GEMINI_API_KEY") || "";
 let ttsApiKey = localStorage.getItem("TTS_API_KEY") || "";
+let modelId = localStorage.getItem("MODEL_ID") || "gemini-2.5-flash";
 let fontSize = localStorage.getItem("FONT_SIZE") || 24;
 let customPersona = localStorage.getItem("CUSTOM_PERSONA") || "";
 
@@ -186,6 +197,11 @@ Pebble.addEventListener('webviewclosed', function(e) {
     localStorage.setItem("GEMINI_API_KEY", geminiApiKey);
   }
 
+  if (settings.MODEL_ID) {
+    modelId = settings.MODEL_ID.value;
+    localStorage.setItem("MODEL_ID", modelId);
+  }
+
   if (settings.TTS_API_KEY) {
     ttsApiKey = settings.TTS_API_KEY.value;
     localStorage.setItem("TTS_API_KEY", ttsApiKey);
@@ -210,9 +226,15 @@ Pebble.addEventListener('appmessage', function(e) {
   if (dict.COMMAND === 'DICTATION') {
     if (!geminiApiKey) geminiApiKey = localStorage.getItem("GEMINI_API_KEY") || "";
     if (!ttsApiKey) ttsApiKey = localStorage.getItem("TTS_API_KEY") || "";
+    if (!modelId) modelId = localStorage.getItem("MODEL_ID") || "";
 
     if (!geminiApiKey || !ttsApiKey) {
       sendErrorToWatch("Missing API key.");
+      return;
+    }
+
+    if (!modelId) {
+      sendErrorToWatch("Missing model ID.");
       return;
     }
     fetchGeminiResponse(dict.TEXT);
@@ -248,7 +270,7 @@ function fetchGeminiResponse(prompt) {
 
   conversationHistory.push({ role: "user", parts: [{ text: prompt }] });
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${geminiApiKey}`;
 
   fetch(url, {
     method: 'POST',
