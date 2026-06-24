@@ -228,8 +228,8 @@ Pebble.addEventListener('appmessage', function(e) {
     if (!ttsApiKey) ttsApiKey = localStorage.getItem("TTS_API_KEY") || "";
     if (!modelId) modelId = localStorage.getItem("MODEL_ID") || "";
 
-    if (!geminiApiKey || !ttsApiKey) {
-      sendErrorToWatch("Missing API key.");
+    if (!geminiApiKey) {
+      sendErrorToWatch("Missing Gemini API key.");
       return;
     }
 
@@ -292,8 +292,9 @@ function fetchGeminiResponse(prompt) {
 
       let rawSentences = replyText.match(/[^.!?]+[.!?]*/g) || [replyText];
       sentenceQueue = rawSentences.map(s => s.trim()).filter(s => s.length > 0);
-
-      startTTSFetchLoop(); // Start aggressive background downloading
+      if (ttsApiKey) {
+        startTTSFetchLoop(); // Start aggressive background downloading
+      }
 
     } else if (data.error && data.error.message) {
       conversationHistory.pop(); 
